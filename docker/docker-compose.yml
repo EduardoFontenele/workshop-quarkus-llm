@@ -1,0 +1,24 @@
+services:
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rh-workshop-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: rh_workshop
+      MYSQL_USER: rh_user
+      MYSQL_PASSWORD: rh_password
+    volumes:
+      - rh_workshop_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  rh_workshop_mysql_data:
